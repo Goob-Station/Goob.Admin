@@ -8,6 +8,8 @@
     ViewData["Title"] = "Ban Hits";
 }
 
+<partial name="Shared/StatusMessageAlert" />
+
 <div class="container">
     <h1>Ban hits for ban @Model.Ban.Ban.Id</h1>
 
@@ -45,10 +47,24 @@
         {
             <dt class="col-sm-2">Actions:</dt>
             <dd class="col-sm-10">
-                <form asp-page-handler="Unban" asp-page="Index">
-                    <input type="hidden" name="Id" value="@Model.Ban.Ban.Id">
-                    <input type="submit" class="btn btn-secondary" value="Unban">
-                </form>
+                <div class="d-flex gap-2">
+                    <form asp-page-handler="Unban" asp-page="Index" method="post">
+                        <input type="hidden" name="Id" value="@Model.Ban.Ban.Id">
+                        <input type="submit" class="btn btn-secondary" value="Unban">
+                    </form>
+                    @if (Model.Ban.Ban.Addresses is { Count: > 0 })
+                    {
+                        <form asp-page-handler="UnbanIp" asp-route-ban="@Model.Ban.Ban.Id" method="post">
+                            <input type="submit" class="btn btn-secondary" value="Unban IP">
+                        </form>
+                    }
+                    @if (Model.Ban.Ban.Hwids is { Count: > 0 })
+                    {
+                        <form asp-page-handler="UnbanHwid" asp-route-ban="@Model.Ban.Ban.Id" method="post">
+                            <input type="submit" class="btn btn-secondary" value="Unban HWID">
+                        </form>
+                    }
+                </div>
             </dd>
         }
     </dl>
